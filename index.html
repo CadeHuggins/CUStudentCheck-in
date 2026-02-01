@@ -25,5 +25,25 @@
     <section class="Home">
         <h2>Home</h2>
     </section>
+    
+    <script>
+        const sidemenu = document.getElementById("sidemenu");
+        const overlay = document.getElementById("overlay");
+        const openBtn = document.getElementById("openMenu");
+        const closeBtn = document.getElementById("closeMenu");
+    
+        openBtn.addEventListener("click", () => {
+          sidemenu.classList.add("open");
+          overlay.classList.add("show");
+        });
+    
+        function closeMenu() {
+          sidemenu.classList.remove("open");
+          overlay.classList.remove("show");
+        }
+    
+        closeBtn.addEventListener("click", closeMenu);
+        overlay.addEventListener("click", closeMenu);
+      </script>
 </body>
 </html>
