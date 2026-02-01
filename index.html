@@ -1,49 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CU Summer Program Home Page</title>
-    <link rel="stylesheet" href="css/main.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CU Summer Program Home Page</title>
+  <link rel="stylesheet" href="css/main.css" />
 </head>
-<body>
-    <header class="header">
-        <button class="menu-btn" id="openMenu" aria-label="Open menu">☰</button>
-        <h1>CU Summer Program</h1>
-      </header>
-    
-      <!-- Overlay -->
-      <div class="overlay" id="overlay"></div>
-    
-      <!-- Side menu -->
-      <nav class="sidemenu" id="sidemenu">
-        <button class="close-btn" id="closeMenu" aria-label="Close menu">✕</button>
-        <a href="index.html">Home</a>
-        <a href="checkin.html">Check-in</a>
-      </nav>
 
-    <section class="Home">
-        <h2>Home</h2>
-    </section>
-    
-    <script>
-        const sidemenu = document.getElementById("sidemenu");
-        const overlay = document.getElementById("overlay");
-        const openBtn = document.getElementById("openMenu");
-        const closeBtn = document.getElementById("closeMenu");
-    
-        openBtn.addEventListener("click", () => {
-          sidemenu.classList.add("open");
-          overlay.classList.add("show");
-        });
-    
-        function closeMenu() {
-          sidemenu.classList.remove("open");
-          overlay.classList.remove("show");
-        }
-    
-        closeBtn.addEventListener("click", closeMenu);
-        overlay.addEventListener("click", closeMenu);
-      </script>
+<body>
+  <header class="header">
+    <button class="menu-btn" id="openMenu" aria-label="Open menu">☰</button>
+    <h1>CU Summer Program</h1>
+  </header>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Side menu -->
+  <nav class="sidemenu" id="sidemenu" aria-label="Side menu">
+    <button class="close-btn" id="closeMenu" aria-label="Close menu">✕</button>
+    <a href="index.html">Home</a>
+    <a href="checkin.html">Check-in</a>
+  </nav>
+
+  <section class="Home">
+    <h2>Home</h2>
+  </section>
+
+  <script>
+    const sidemenu = document.getElementById("sidemenu");
+    const overlay = document.getElementById("overlay");
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+
+    function openMenu() {
+      sidemenu.classList.add("open");
+      overlay.classList.add("show");
+      document.body.classList.add("menu-open");
+    }
+
+    function closeMenu() {
+      sidemenu.classList.remove("open");
+      overlay.classList.remove("show");
+      document.body.classList.remove("menu-open");
+    }
+
+    openBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
+  </script>
 </body>
 </html>
