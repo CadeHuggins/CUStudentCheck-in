@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CU Student Checkin</title>
-    <link rel="stylesheet" href="css/main.css">
-</head>
-<script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CU Student Checkin</title>
+  <link rel="stylesheet" href="css/main.css" />
+
+  <script>
     function handleOther(select) {
       const otherInput = document.getElementById("otherInput");
       if (select.value === "other") {
@@ -17,28 +17,34 @@
       }
     }
   </script>
-<body>
-    <header>
-        <h1>Student Check-in</h1>
-    </header>
+</head>
 
-    <section class="Check-in">
-        <h2>Check-in</h2>
-        <label for="Location">Location</label>
-        <select id="Location" name="role">
-            <option value="">-- Choose an option --</option>
-            <option value="Dorms">Dorms</option>
-            <option value="Field">Field</option>
-            <option value="Gym">Gym</option>
-            <option value="Other">Other</option>
-        </select>
-        <br><br>
-        <input
-          type="text"
-          id="otherInput"
-          placeholder="Please specify"
-          style="display:none;"
-        >
-    </section>
+<body>
+  <header>
+    <h1>Student Check-in</h1>
+  </header>
+
+  <section class="Check-in">
+    <h2>Check-in</h2>
+
+    <label for="Location">Location</label>
+    <select id="Location" name="location" onchange="handleOther(this)">
+      <option value="">-- Choose an option --</option>
+      <option value="Dorms">Dorms</option>
+      <option value="Field">Field</option>
+      <option value="Gym">Gym</option>
+      <option value="other">Other</option>
+    </select>
+
+    <br /><br />
+
+    <input
+      type="text"
+      id="otherInput"
+      name="location_other"
+      placeholder="Please specify"
+      style="display: none;"
+    />
+  </section>
 </body>
-</html> 
+</html>
