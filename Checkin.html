@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CU Student Checkin</title>
   <link rel="stylesheet" href="css/main.css" />
-</head>
 
-<script>
+  <script>
     function handleOther(select) {
       const otherInput = document.getElementById("otherInput");
       if (select.value === "other") {
@@ -18,62 +17,66 @@
       }
     }
   </script>
+</head>
 
-<script>
+<body>
+  <header class="header">
+    <button class="menu-btn" id="openMenu" aria-label="Open menu">☰</button>
+    <h1>Student Check-in</h1>
+  </header>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Side menu -->
+  <nav class="sidemenu" id="sidemenu">
+    <button class="close-btn" id="closeMenu" aria-label="Close menu">✕</button>
+    <a href="index.html">Home</a>
+    <a href="checkin.html">Check-in</a>
+  </nav>
+
+  <section class="Check-in">
+    <h2>Check-in</h2>
+
+    <label for="Location">Location</label>
+    <select id="Location" name="location" onchange="handleOther(this)">
+      <option value="">-- Choose an option --</option>
+      <option value="Dorms">Dorms</option>
+      <option value="Field">Field</option>
+      <option value="Gym">Gym</option>
+      <option value="other">Other</option>
+    </select>
+
+    <br /><br />
+
+    <input
+      type="text"
+      id="otherInput"
+      name="location_other"
+      placeholder="Please specify"
+      style="display: none;"
+    />
+  </section>
+
+  <!-- Menu JS MUST be down here -->
+  <script>
     const sidemenu = document.getElementById("sidemenu");
     const overlay = document.getElementById("overlay");
     const openBtn = document.getElementById("openMenu");
     const closeBtn = document.getElementById("closeMenu");
-  
-    openBtn.onclick = () => {
+
+    openBtn.addEventListener("click", () => {
       sidemenu.classList.add("open");
       overlay.classList.add("show");
-    };
-  
-    closeBtn.onclick = overlay.onclick = () => {
+    });
+
+    function closeMenu() {
       sidemenu.classList.remove("open");
       overlay.classList.remove("show");
-    };
+    }
+
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
   </script>
-
-<body>
-    <header class="header">
-        <button class="menu-btn" id="openMenu" aria-label="Open menu">☰</button>
-        <h1>Student Check-in</h1>
-      </header>
-      
-      <!-- Overlay -->
-      <div class="overlay" id="overlay"></div>
-      
-      <!-- Side menu -->
-      <nav class="sidemenu" id="sidemenu">
-        <button class="close-btn" id="closeMenu">✕</button>
-      
-        <a href="index.html">Home</a>
-        <a href="checkin.html">Check-in</a>
-      </nav>
-
-    <section class="Check-in">
-        <h2>Check-in</h2>
-
-        <label for="Location">Location</label>
-        <select id="Location" name="location" onchange="handleOther(this)">
-            <option value="">-- Choose an option --</option>
-            <option value="Dorms">Dorms</option>
-            <option value="Field">Field</option>
-            <option value="Gym">Gym</option>
-            <option value="other">Other</option>
-        </select>
-
-        <br /><br />
-
-        <input
-        type="text"
-        id="otherInput"
-        name="location_other"
-        placeholder="Please specify"
-        style="display: none;"
-        />
-    </section>
 </body>
 </html>
