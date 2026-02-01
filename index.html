@@ -7,15 +7,23 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <header>
+    <header class="header">
+        <button class="menu-btn" id="openMenu" aria-label="Open menu">☰</button>
         <h1>CU Summer Program</h1>
-    </header>
+      </header>
+    
+      <!-- Overlay -->
+      <div class="overlay" id="overlay"></div>
+    
+      <!-- Side menu -->
+      <nav class="sidemenu" id="sidemenu">
+        <button class="close-btn" id="closeMenu" aria-label="Close menu">✕</button>
+        <a href="index.html">Home</a>
+        <a href="checkin.html">Check-in</a>
+      </nav>
 
     <section class="Home">
         <h2>Home</h2>
-        <ul>
-            <li><a href="Checkin.html">Student Check-in</a></li>
-        </ul>
     </section>
 </body>
 </html>
