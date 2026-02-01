@@ -8,7 +8,7 @@ body {
 }
 
 header {
-    background-color: #acacac;
+    background-color:#CFB87C;
     padding: 20px;
     text-align: center;
 }
@@ -110,7 +110,7 @@ iframe {
   justify-content: center;
   position: relative;
   height: 64px;
-  background: #bcbcbc;
+  background: #CFB87C;
   border-radius: 6px;
 }
 
