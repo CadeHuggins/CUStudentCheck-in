@@ -6,6 +6,17 @@
     <title>CU Student Checkin</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
+<script>
+    function handleOther(select) {
+      const otherInput = document.getElementById("otherInput");
+      if (select.value === "other") {
+        otherInput.style.display = "block";
+      } else {
+        otherInput.style.display = "none";
+        otherInput.value = "";
+      }
+    }
+  </script>
 <body>
     <header>
         <h1>Student Check-in</h1>
@@ -30,15 +41,4 @@
         >
     </section>
 </body>
-<script>
-    function handleOther(select) {
-      const otherInput = document.getElementById("otherInput");
-      if (select.value === "other") {
-        otherInput.style.display = "block";
-      } else {
-        otherInput.style.display = "none";
-        otherInput.value = "";
-      }
-    }
-  </script>
 </html> 
