@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Template Page</title>
+
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <button class="menu-btn" id="openMenu" aria-label="Open menu">☰</button>
+    <h1>Page Title</h1>
+  </header>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Sidebar -->
+  <nav class="sidemenu" id="sidemenu">
+    <button class="close-btn" id="closeMenu" aria-label="Close menu">✕</button>
+
+    <a href="index.html">Home</a>
+    <a href="#">Page 1</a>
+    <a href="#">Page 2</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content">
+    <section class="page-section">
+      <h2>Section Title</h2>
+
+      <p>
+        Add your content here.
+      </p>
+    </section>
+  </main>
+
+  <!-- Sidebar Script -->
+  <script>
+    const sidemenu = document.getElementById("sidemenu");
+    const overlay = document.getElementById("overlay");
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+
+    openBtn.addEventListener("click", () => {
+      sidemenu.classList.add("open");
+      overlay.classList.add("show");
+    });
+
+    function closeMenu() {
+      sidemenu.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+  </script>
+
+</body>
+</html>
