@@ -20,22 +20,23 @@
   </section>
 
   <script>
-    function login() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+  function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
-      const validUsername = "CadeAdmin";
-      const validPassword = "Chugg!";
+    const validUsername = "CadeAdmin";
+    const validPassword = "Chugg!";
 
-      if (username === validUsername && password === validPassword) {
-        localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("staffName", username);
+    if (username === validUsername && password === validPassword) {
+      sessionStorage.setItem("loggedIn", "true");
+      sessionStorage.setItem("staffName", username);
 
-        window.location.href = "index.html";
-      } else {
-        document.getElementById("loginMessage").textContent =
-          "Incorrect username or password.";
+      window.location.href = "index.html";
+    } else {
+      document.getElementById("loginMessage").textContent =
+        "Incorrect username or password.";
     }
-  </script>
+  }
+</script>
 </body>
 </html>
