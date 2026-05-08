@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<script>
-  if (localStorage.getItem("loggedIn") !== "true") {
-    window.location.href = "login.html";
-  }
-</script>
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,6 +21,11 @@
 </head>
 
 <body>
+  <script>
+  if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
   <header class="header">
     <button class="menu-btn" id="openMenu" aria-label="Open menu">☰</button>
     <h1>Student Check-in</h1>
