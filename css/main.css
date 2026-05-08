@@ -161,18 +161,20 @@ iframe {
 
 .logout-btn {
   margin-top: auto;
-  background: none;
+  background-color: transparent;
   border: none;
-  color: black;
+  color: white;          /* makes text visible */
   font-size: 18px;
   padding: 15px;
   width: 100%;
   text-align: left;
   cursor: pointer;
+  outline: none;
 }
 
 .logout-btn:hover {
-  background-color: #444;
+  background: #f2f2f2;
+  border-radius: 8px;
 }
 
 /* Close button */
