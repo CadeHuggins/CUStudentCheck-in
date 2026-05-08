@@ -8,6 +8,11 @@
 </head>
 
 <body>
+  <script>
+  if (sessionStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
   <header class="header">
     <button class="menu-btn" id="openMenu" aria-label="Open menu">☰</button>
     <h1>CU Summer Program</h1>
@@ -26,12 +31,6 @@
   <section class="Home">
     <h2>Home</h2>
   </section>
-
-<script>
-  if (localStorage.getItem("loggedIn") !== "true") {
-    window.location.href = "login.html";
-  }
-</script>
 
   <script>
     const sidemenu = document.getElementById("sidemenu");
