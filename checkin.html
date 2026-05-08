@@ -39,6 +39,7 @@
     <button class="close-btn" id="closeMenu" aria-label="Close menu">✕</button>
     <a href="index.html">Home</a>
     <a href="checkin.html">Check-in</a>
+    <a href="#" onclick="logout()">Logout</a>
   </nav>
 
   <section class="Check-in">
@@ -79,6 +80,12 @@
       sidemenu.classList.remove("open");
       overlay.classList.remove("show");
     }
+    
+    function logout() {
+    sessionStorage.removeItem("loggedIn");
+    sessionStorage.removeItem("staffName");
+    window.location.href = "login.html";
+  }
 
     closeBtn.addEventListener("click", closeMenu);
     overlay.addEventListener("click", closeMenu);
