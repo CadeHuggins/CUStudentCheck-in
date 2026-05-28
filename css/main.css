@@ -165,7 +165,7 @@ iframe {
   margin-bottom: 20px;
   background-color: transparent;
   border: none;
-  color: white;
+  color: black;
   font-size: 18px;
   padding: 15px;
   width: 100%;
@@ -174,8 +174,8 @@ iframe {
 }
 
 .logout-btn:hover {
-  background: white;
-  color: lightgray;
+  background: lightgray;
+  color: black;
   border-radius: 8px;
 }
 
