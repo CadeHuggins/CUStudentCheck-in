@@ -65,9 +65,37 @@
       placeholder="Please specify"
       style="display: none;"
     />
+    <br /><br />
+
+    <label for="checkinOutput">Current Scan</label>
+    <textarea id="checkinOutput" rows="4" readonly></textarea>
   </section>
   
   <script>
+    if (location === "") {
+     alert("Please choose a location before scanning.");
+     return;
+  }
+
+    let lastScan = "";
+
+    function storeScan(qrText) {
+  // deletes/replaces the old scan before showing the new one
+    document.getElementById("checkinOutput").value = "";
+
+    let location = document.getElementById("Location").value;
+
+   if (location === "other") {
+      location = document.getElementById("otherInput").value;
+    }
+
+   const time = new Date().toLocaleString();
+   const staffName = sessionStorage.getItem("staffName");
+
+   lastScan = `${qrText} / ${location} / ${time} / ${staffName}`;
+
+   document.getElementById("checkinOutput").value = lastScan;
+  }
     const sidemenu = document.getElementById("sidemenu");
     const overlay = document.getElementById("overlay");
     const openBtn = document.getElementById("openMenu");
