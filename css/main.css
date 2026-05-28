@@ -141,6 +141,7 @@ iframe {
   flex-direction: column;
   transition: 0.3s;
   padding-top: 20px;
+  z-index: 1001;
 }
 
 .sidemenu.open {
