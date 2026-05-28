@@ -65,12 +65,17 @@
       placeholder="Please specify"
       style="display: none;"
     />
+
+    <label for="qrInput">Scan QR Code</label>
+    <input type="text" id="qrInput" placeholder="Click here, then scan QR code" />
+
     <br /><br />
 
     <label for="checkinOutput">Current Scan</label>
     <textarea id="checkinOutput" rows="4" readonly></textarea>
 
     <br /><br />
+    
     <button onclick="storeScan('John Smith 123456')">Test Scan</button>
   </section>
   
@@ -107,6 +112,19 @@
     // Show it in the textbox
     document.getElementById("checkinOutput").value = lastScan;
   }
+
+  const qrInput = document.getElementById("qrInput");
+
+qrInput.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    const qrText = qrInput.value;
+
+    storeScan(qrText);
+
+    // clears the QR input before the next scan
+    qrInput.value = "";
+  }
+});
 
   // Side menu code
   const sidemenu = document.getElementById("sidemenu");
