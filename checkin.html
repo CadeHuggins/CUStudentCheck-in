@@ -142,29 +142,32 @@
 }
     
     let lastQr = "";
+    
+    let scanLocked = false;
 
     function onScanSuccess(decodedText) {
-      if (decodedText === lastQr) return;
+      if (scanLocked) return;
 
-      lastQr = decodedText;
+      scanLocked = true;
 
       storeScan(decodedText);
       showSuccessAnimation();
 
       setTimeout(() => {
-        lastQr = "";
+        scanLocked = false;
       }, 3000);
     }
 
-    const html5QrCode = new Html5QrcodeScanner(
-      "reader",
+    const html5QrCode = new Html5Qrcode("reader");
+
+    html5QrCode.start(
+      { facingMode: "environment" }, // back camera
       {
         fps: 10,
         qrbox: 250
-      }
+      },
+      onScanSuccess
     );
-
-    html5QrCode.render(onScanSuccess);
 
     function showSuccessAnimation() {
       const success = document.getElementById("scanSuccess");
