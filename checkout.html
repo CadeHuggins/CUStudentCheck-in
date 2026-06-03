@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CU Student Checkin</title>
+  <link rel="stylesheet" href="css/main.css" />
+  
+  <script>
+    function handleOther(select) {
+      const otherInput = document.getElementById("otherInput");
+      if (select.value === "other") {
+        otherInput.style.display = "block";
+      } else {
+        otherInput.style.display = "none";
+        otherInput.value = "";
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <script>
+  if (sessionStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
+  <header class="header">
+    <button class="menu-btn" id="openMenu" aria-label="Open menu">☰</button>
+    <h1>Student Check-in</h1>
+  </header>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Side menu -->
+  <nav class="sidemenu" id="sidemenu">
+  <button class="close-btn" id="closeMenu">✕</button>
+
+  <a href="index.html">Home</a>
+  <a href="checkin.html">Check-in</a>
+  <a href="checkout.html">Check-out</a>
+    
+  <button onclick="logout()" class="logout-btn">Logout</button>
+</nav>
+
+  <section class="Check-in">
+    <h2>Check-in</h2>
+
+    <select id="checkType" name="checkType">
+      <option value="">-- Choose an option --</option>
+      <option value="Check-in">Check-in</option>
+      <option value="Check-out">Check-out</option>
+    </select>
+
+<br /><br />
+    
+    <label for="Location">Location</label>
+    <select id="Location" name="location" onchange="handleOther(this)">
+      <option value="">-- Choose an option --</option>
+      <option value="Dorms">Dorms</option>
+      <option value="Field">Field</option>
+      <option value="Gym">Gym</option>
+      <option value="other">Other</option>
+    </select>
+
+    <br /><br />
+
+    <input
+      type="text"
+      id="otherInput"
+      name="location_other"
+      placeholder="Please specify"
+      style="display: none;"
+    />
+
+    <label for="qrInput">Scan QR Code</label>
+    <input type="text" id="qrInput" placeholder="Click here, then scan QR code" />
+
+    <br /><br />
+
+    <label for="checkinOutput">Current Scan</label>
+    <textarea id="checkinOutput" rows="4" readonly></textarea>
+
+    <br /><br />
+    
+    <button onclick="storeScan('John Smith 123456')">Test Scan</button>
+  </section>
+  
+  <script>
+  let lastScan = "";
+
+  function storeScan(qrText) {
+    // Clear old scan
+    document.getElementById("checkinOutput").value = "";
+    
+    // Get selected location
+    let location = document.getElementById("Location").value;
+
+    // Make sure location is selected
+    if (location === "") {
+      alert("Please choose a location before scanning.");
+      return;
+    }
+
+    // Handle custom location
+    if (location === "other") {
+      location = document.getElementById("otherInput").value;
+    }
+
+    // Get current time
+    const time = new Date().toLocaleString();
+
+    // Get logged in staff member
+    const staffName = sessionStorage.getItem("staffName");
+
+    // Create final check-in string
+    lastScan = `${qrText} / "Checked out to" / ${location} / ${time} / ${staffName}`;
+
+    // Show it in the textbox
+    document.getElementById("checkinOutput").value = lastScan;
+  }
+
+  const qrInput = document.getElementById("qrInput");
+
+qrInput.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    const qrText = qrInput.value;
+
+    storeScan(qrText);
+
+    // clears the QR input before the next scan
+    qrInput.value = "";
+  }
+});
+
+  // Side menu code
+  const sidemenu = document.getElementById("sidemenu");
+  const overlay = document.getElementById("overlay");
+  const openBtn = document.getElementById("openMenu");
+  const closeBtn = document.getElementById("closeMenu");
+
+  openBtn.addEventListener("click", () => {
+    sidemenu.classList.add("open");
+    overlay.classList.add("show");
+  });
+
+  function closeMenu() {
+    sidemenu.classList.remove("open");
+    overlay.classList.remove("show");
+  }
+
+  // Logout
+  function logout() {
+    sessionStorage.removeItem("loggedIn");
+    sessionStorage.removeItem("staffName");
+    window.location.href = "login.html";
+  }
+
+  closeBtn.addEventListener("click", closeMenu);
+  overlay.addEventListener("click", closeMenu);
+</script>
+</body>
+</html>
