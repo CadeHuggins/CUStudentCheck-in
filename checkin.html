@@ -24,6 +24,11 @@
 </head>
 
 <body>
+
+  <div id="scanSuccess">
+    <div class="checkmark">✅</div>
+  </div>
+  
   <script>
   if (sessionStorage.getItem("loggedIn") !== "true") {
     window.location.href = "login.html";
@@ -69,17 +74,18 @@
       style="display: none;"
     />
 
-    <label for="qrInput">Scan QR Code</label>
-    <input type="text" id="qrInput" placeholder="Click here, then scan QR code" />
-
-    <br /><br />
-
     <label>Scan QR Code</label>
     <div id="reader"></div>
 
     <br /><br />
+    
+    <label for="checkinOutput">Output</label>
+    <textarea id="checkinOutput" rows="4" readonly></textarea>
+
+    <br /><br />
 
     <button onclick="storeScan('John Smith 123456')">Test Scan</button>
+
   </section>
   
   <script>
@@ -119,19 +125,6 @@
     sendToSheet(qrText, checkType, location, time, staffName);
   }
 
-  const qrInput = document.getElementById("qrInput");
-
-qrInput.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    const qrText = qrInput.value;
-
-    storeScan(qrText);
-
-    // clears the QR input before the next scan
-    qrInput.value = "";
-  }
-});
-
   function sendToSheet(qrText, checkType, location, time, staffName) {
   const date = new Date().toLocaleDateString();
 
@@ -147,9 +140,20 @@ qrInput.addEventListener("keydown", function(event) {
     })
   });
 }
+    
+    let lastQr = "";
 
     function onScanSuccess(decodedText) {
+      if (decodedText === lastQr) return;
+
+      lastQr = decodedText;
+
       storeScan(decodedText);
+      showSuccessAnimation();
+
+      setTimeout(() => {
+        lastQr = "";
+      }, 3000);
     }
 
     const html5QrCode = new Html5QrcodeScanner(
@@ -161,6 +165,17 @@ qrInput.addEventListener("keydown", function(event) {
     );
 
     html5QrCode.render(onScanSuccess);
+
+    function showSuccessAnimation() {
+      const success = document.getElementById("scanSuccess");
+
+      success.style.display = "flex";
+
+      setTimeout(() => {
+        success.style.display = "none";
+      }, 1000);
+    }
+    
   // Side menu code
   const sidemenu = document.getElementById("sidemenu");
   const overlay = document.getElementById("overlay");
