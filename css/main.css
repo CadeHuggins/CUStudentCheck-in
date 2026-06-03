@@ -119,6 +119,12 @@ iframe {
   font-size: 22px;
 }
 
+#reader {
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+}
+
 /* Menu button in header */
 .menu-btn {
   position: absolute;
@@ -127,6 +133,7 @@ iframe {
   background: none;
   border: none;
   cursor: pointer;
+  color: black;
 }
 
 .sidemenu {
