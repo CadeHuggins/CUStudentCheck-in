@@ -107,7 +107,7 @@
     const staffName = sessionStorage.getItem("staffName");
 
     // Create final check-in string
-    lastScan = `${qrText} / "Checked in at" / ${location} / ${time} / ${staffName}`;
+    lastScan = `${qrText} / Checked in the ${location} / ${time} / ${staffName}`;
 
     // Show it in the textbox
     document.getElementById("checkinOutput").value = lastScan;
