@@ -18,6 +18,9 @@
       }
     }
   </script>
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  
 </head>
 
 <body>
@@ -71,11 +74,11 @@
 
     <br /><br />
 
-    <label for="checkinOutput">Output</label>
-    <textarea id="checkinOutput" rows="4" readonly></textarea>
+    <label>Scan QR Code</label>
+    <div id="reader"></div>
 
     <br /><br />
-    
+
     <button onclick="storeScan('John Smith 123456')">Test Scan</button>
   </section>
   
@@ -144,7 +147,20 @@ qrInput.addEventListener("keydown", function(event) {
     })
   });
 }
-    
+
+    function onScanSuccess(decodedText) {
+      storeScan(decodedText);
+    }
+
+    const html5QrCode = new Html5QrcodeScanner(
+      "reader",
+      {
+        fps: 10,
+        qrbox: 250
+      }
+    );
+
+    html5QrCode.render(onScanSuccess);
   // Side menu code
   const sidemenu = document.getElementById("sidemenu");
   const overlay = document.getElementById("overlay");
