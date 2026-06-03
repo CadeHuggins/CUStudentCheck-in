@@ -46,16 +46,8 @@
 </nav>
 
   <section class="Check-in">
-    <h2>Check-in</h2>
 
-    <label for="checkType">Check Type</label>
-    <select id="checkType" name="checkType">
-      <option value="">-- Choose an option --</option>
-      <option value="Check-in">Check-in</option>
-      <option value="Check-out">Check-out</option>
-    </select>
-
-<br /><br />
+    <br /><br />
     
     <label for="Location">Location</label>
     <select id="Location" name="location" onchange="handleOther(this)">
@@ -81,7 +73,7 @@
 
     <br /><br />
 
-    <label for="checkinOutput">Current Scan</label>
+    <label for="checkinOutput">Output</label>
     <textarea id="checkinOutput" rows="4" readonly></textarea>
 
     <br /><br />
@@ -95,13 +87,6 @@
   function storeScan(qrText) {
     // Clear old scan
     document.getElementById("checkinOutput").value = "";
-
-    let checkType = document.getElementById("checkType").value;
-
-    if (checkType === "") {
-      alert("Please choose Check-in or Check-out before scanning.");
-      return;
-    }
     
     // Get selected location
     let location = document.getElementById("Location").value;
@@ -124,7 +109,7 @@
     const staffName = sessionStorage.getItem("staffName");
 
     // Create final check-in string
-    lastScan = `${qrText} / ${checkType} / ${location} / ${time} / ${staffName}`;
+    lastScan = `${qrText} / "Checked in at" / ${location} / ${time} / ${staffName}`;
 
     // Show it in the textbox
     document.getElementById("checkinOutput").value = lastScan;
