@@ -83,6 +83,7 @@
   let lastScan = "";
 
   function storeScan(qrText) {
+    const checkType = "Check-In";
     // Clear old scan
     document.getElementById("checkinOutput").value = "";
     
@@ -111,6 +112,8 @@
 
     // Show it in the textbox
     document.getElementById("checkinOutput").value = lastScan;
+
+    sendToSheet(qrText, checkType, location, time, staffName);
   }
 
   const qrInput = document.getElementById("qrInput");
@@ -126,6 +129,22 @@ qrInput.addEventListener("keydown", function(event) {
   }
 });
 
+  function sendToSheet(qrText, checkType, location, time, staffName) {
+  const date = new Date().toLocaleDateString();
+
+  fetch("https://script.google.com/macros/s/AKfycbz-aRNNCpZBAOPzyJ7fXEdkJ3sRfxu1uF5OL08lmweUl9oJww4sJksjvlR44HEp7fOZ/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      studentInfo: qrText,
+      checkType: checkType,
+      location: location,
+      time: time,
+      date: date,
+      staffName: staffName
+    })
+  });
+}
+    
   // Side menu code
   const sidemenu = document.getElementById("sidemenu");
   const overlay = document.getElementById("overlay");
