@@ -124,39 +124,34 @@
 
     sendToSheet(qrText, checkType, location, time, staffName);
   }
+  let lastSubmittedQr = "";
 
   function sendToSheet(qrText, checkType, location, time, staffName) {
-  const date = new Date().toLocaleDateString();
 
-  fetch("https://script.google.com/macros/s/AKfycbz-aRNNCpZBAOPzyJ7fXEdkJ3sRfxu1uF5OL08lmweUl9oJww4sJksjvlR44HEp7fOZ/exec", {
-    method: "POST",
-    body: JSON.stringify({
-      studentInfo: qrText,
-      checkType: checkType,
-      location: location,
-      time: time,
-      date: date,
-      staffName: staffName
-    })
-  });
-}
+    if (lastSubmittedQr === qrText) {
+      return;
+    }
 
-    let scanLocked = false;
+    lastSubmittedQr = qrText;
+
+    const date = new Date().toLocaleDateString();
+
+    fetch("https://script.google.com/macros/s/AKfycbz-aRNNCpZBAOPzyJ7fXEdkJ3sRfxu1uF5OL08lmweUl9oJww4sJksjvlR44HEp7fOZ/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          studentInfo: qrText,
+          checkType: checkType,
+          location: location,
+          time: time,
+          date: date,
+          staffName: staffName
+        })
+      });
+    }
 
     function onScanSuccess(decodedText) {
-      if (scanLocked) return;
-
-      scanLocked = true;
-
       storeScan(decodedText);
       showSuccessAnimation();
-
-      html5QrCode.pause();
-
-      setTimeout(() => {
-        html5QrCode.resume();
-        scanLocked = false;
-      }, 2000);
     }
 
     const html5QrCode = new Html5Qrcode("reader");
