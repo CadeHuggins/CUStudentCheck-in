@@ -24,6 +24,7 @@
 </head>
 
 <body>
+  <div id="scanSuccess"></div>
   
   <script>
   if (sessionStorage.getItem("loggedIn") !== "true") {
@@ -147,7 +148,6 @@
 
     function onScanSuccess(decodedText) {
       storeScan(decodedText);
-      showSuccessAnimation();
     }
 
     const html5QrCode = new Html5Qrcode("reader");
@@ -160,16 +160,6 @@
       },
       onScanSuccess
     );
-
-    function showSuccessAnimation() {
-      const success = document.getElementById("scanSuccess");
-
-      success.style.display = "flex";
-
-      setTimeout(() => {
-        success.style.display = "none";
-      }, 1000);
-    }
     
   // Side menu code
   const sidemenu = document.getElementById("sidemenu");
