@@ -140,22 +140,17 @@
     })
   });
 }
-    
     let lastQr = "";
-    
-    let scanLocked = false;
 
     function onScanSuccess(decodedText) {
-      if (scanLocked) return;
+      if (decodedText === lastQr) {
+        return;
+      }
 
-      scanLocked = true;
+      lastQr = decodedText;
 
       storeScan(decodedText);
       showSuccessAnimation();
-
-      setTimeout(() => {
-        scanLocked = false;
-      }, 3000);
     }
 
     const html5QrCode = new Html5Qrcode("reader");
