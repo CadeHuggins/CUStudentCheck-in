@@ -140,23 +140,29 @@
     })
   });
 }
-    let lastQr = "";
+
+    let scanLocked = false;
 
     function onScanSuccess(decodedText) {
-      if (decodedText === lastQr) {
-        return;
-      }
+      if (scanLocked) return;
 
-      lastQr = decodedText;
+      scanLocked = true;
 
       storeScan(decodedText);
       showSuccessAnimation();
+
+      html5QrCode.pause();
+
+      setTimeout(() => {
+        html5QrCode.resume();
+        scanLocked = false;
+      }, 2000);
     }
 
     const html5QrCode = new Html5Qrcode("reader");
 
     html5QrCode.start(
-      { facingMode: "environment" }, // back camera
+      { facingMode: "environment" },
       {
         fps: 10,
         qrbox: 250
