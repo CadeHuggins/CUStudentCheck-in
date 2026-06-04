@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CU Student Checkin</title>
+  <title>CU Student Check-In</title>
   <link rel="stylesheet" href="css/main.css" />
   
   <script>
@@ -47,7 +47,7 @@
   <button class="close-btn" id="closeMenu">✕</button>
 
   <a href="index.html">Home</a>
-  <a href="checkin.html">Check-in</a>
+  <a href="checkin.html">Check-In</a>
   <a href="checkout.html">Check-Out</a>
 
   <button onclick="logout()" class="logout-btn">Logout</button>
@@ -111,7 +111,7 @@
     }
 
     // Get current time
-    const time = new Date().toLocaleString();
+    const time = new Date().toLocaleTimeString();
 
     // Get logged in staff member
     const staffName = sessionStorage.getItem("staffName");
