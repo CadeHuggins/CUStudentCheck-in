@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Authorized Adult</title>
+  <link rel="stylesheet" href="css/main.css" />
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+
+<body>
+
+  <script>
+    if (sessionStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <header class="header">
+    <button class="menu-btn" id="openMenu" aria-label="Open menu">☰</button>
+    <h1>Add Authorized Adult</h1>
+  </header>
+
+  <div class="overlay" id="overlay"></div>
+
+  <nav class="sidemenu" id="sidemenu">
+    <button class="close-btn" id="closeMenu">✕</button>
+
+    <a href="index.html">Home</a>
+    <a href="checkin.html">Check-In</a>
+    <a href="checkout.html">Check-Out</a>
+    <a href="parentcheck.html">Parental Check</a>
+    <a href="addadult.html">Add Adult</a>
+
+    <button onclick="logout()" class="logout-btn">Logout</button>
+  </nav>
+
+  <section class="Check-in">
+
+    <label for="guardianName">Adult Name</label>
+    <input type="text" id="guardianName" placeholder="Enter adult name" />
+
+    <br /><br />
+
+    <label for="dlLast4">DL Last 4 Digits</label>
+    <input type="text" id="dlLast4" maxlength="4" placeholder="Last 4 digits" />
+
+    <br /><br />
+
+    <label>Scan Student QR Code</label>
+    <div id="reader"></div>
+
+    <br /><br />
+
+    <label for="adultOutput">Output</label>
+    <textarea id="adultOutput" rows="4" readonly></textarea>
+
+    <br /><br />
+
+    <button onclick="saveAuthorizedAdult()">Add Authorized Adult</button>
+
+    <br /><br />
+
+    <button onclick="storeStudent('John Smith 123456')">Test Student Scan</button>
+
+  </section>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyxX6f3GJdqdmDrqhTnZDV27OxjAawB8Ewc2OIWmMhmamQUKXZvrXXFFJUGAEwQyC8/exec";
+
+    let scannedStudent = "";
+    let lastSavedAdult = "";
+
+    function storeStudent(qrText) {
+      scannedStudent = qrText;
+      document.getElementById("adultOutput").value =
+        `Student scanned: ${scannedStudent}`;
+    }
+
+    function saveAuthorizedAdult() {
+      const guardianName = document.getElementById("guardianName").value.trim();
+      const dlLast4 = document.getElementById("dlLast4").value.trim();
+
+      if (scannedStudent === "") {
+        alert("Please scan a student QR code first.");
+        return;
+      }
+
+      if (guardianName === "") {
+        alert("Please enter the adult name.");
+        return;
+      }
+
+      if (!/^\d{4}$/.test(dlLast4)) {
+        alert("Please enter exactly 4 digits for DL Last 4.");
+        return;
+      }
+
+      const date = new Date().toLocaleDateString();
+      const staffName = sessionStorage.getItem("staffName");
+
+      const saveKey = `${scannedStudent}-${guardianName}-${dlLast4}`;
+
+      if (lastSavedAdult === saveKey) {
+        alert("This adult was already added for this student.");
+        return;
+      }
+
+      lastSavedAdult = saveKey;
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          sheetName: "Authorized Adults",
+          studentInfo: scannedStudent,
+          guardianName: guardianName,
+          dlLast4: dlLast4,
+          date: date,
+          staffName: staffName
+        })
+      });
+
+      document.getElementById("adultOutput").value =
+        `${guardianName} / DL ending ${dlLast4} added for ${scannedStudent}`;
+    }
+
+    function onScanSuccess(decodedText) {
+      storeStudent(decodedText);
+    }
+
+    const html5QrCode = new Html5Qrcode("reader");
+
+    html5QrCode.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: 250
+      },
+      onScanSuccess
+    );
+
+    const sidemenu = document.getElementById("sidemenu");
+    const overlay = document.getElementById("overlay");
+    const openBtn = document.getElementById("openMenu");
+    const closeBtn = document.getElementById("closeMenu");
+
+    openBtn.addEventListener("click", () => {
+      sidemenu.classList.add("open");
+      overlay.classList.add("show");
+    });
+
+    function closeMenu() {
+      sidemenu.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+
+    function logout() {
+      sessionStorage.removeItem("loggedIn");
+      sessionStorage.removeItem("staffName");
+      window.location.href = "login.html";
+    }
+
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+  </script>
+
+</body>
+</html>
