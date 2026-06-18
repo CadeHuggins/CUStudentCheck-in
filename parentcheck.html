@@ -40,33 +40,33 @@
 
   <section class="Check-in">
 
-    <label for="guardianName">Parent/Guardian Name</label>
-    <input type="text" id="guardianName" placeholder="Enter parent/guardian name" />
+  <label for="guardianName">Parent/Guardian Name</label>
+  <input type="text" id="guardianName" placeholder="Enter parent/guardian name" />
 
-    <br /><br />
+  <br /><br />
 
-    <label for="dlLast4">DL Last 4 Digits</label>
-    <input type="text" id="dlLast4" maxlength="4" placeholder="Last 4 digits" />
+  <label for="dlLast4">DL Last 4 Digits</label>
+  <input type="text" id="dlLast4" maxlength="4" placeholder="Last 4 digits" />
 
-    <br /><br />
+  <br /><br />
 
-    <label>Scan Student QR Code</label>
-    <div id="reader"></div>
+  <label>Scan Student QR Code</label>
+  <div id="reader"></div>
 
-    <br /><br />
+  <br /><br />
 
-    <label for="parentOutput">Output</label>
-    <textarea id="parentOutput" rows="4" readonly></textarea>
+  <label for="parentOutput">Output</label>
+  <textarea id="parentOutput" rows="4" readonly></textarea>
 
-    <br /><br />
+  <br /><br />
 
-    <button onclick="confirmPickup()">Confirm Pickup</button>
+  <button onclick="confirmPickup()">Confirm Pickup</button>
 
-    <br /><br />
+  <br /><br />
 
-    <button onclick="storeStudent('John Smith 123456')">Test Student Scan</button>
+  <button onclick="storeStudent('John Smith 123456')">Test Student Scan</button>
 
-  </section>
+</section>
 
   <script>
     let scannedStudent = "";
