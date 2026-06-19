@@ -34,6 +34,7 @@
     <a href="checkin.html">Check-In</a>
     <a href="checkout.html">Check-Out</a>
     <a href="parentcheck.html">Parental Check</a>
+    <a href="addadult.html">Add Adult</a>
 
     <button onclick="logout()" class="logout-btn">Logout</button>
   </nav>
@@ -69,6 +70,8 @@
 </section>
 
   <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyxX6f3GJdqdmDrqhTnZDV27OxjAawB8Ewc2OIWmMhmamQUKXZvrXXFFJUGAEwQyC8/exec";
+
     let scannedStudent = "";
     let lastSubmittedPickup = "";
 
@@ -79,7 +82,7 @@
     }
 
     function confirmPickup() {
-       const guardianName = document.getElementById("guardianName").value.trim();
+      const guardianName = document.getElementById("guardianName").value.trim();
       const dlLast4 = document.getElementById("dlLast4").value.trim();
 
       if (scannedStudent === "") {
@@ -97,28 +100,48 @@
         return;
       }
 
-      verifyAdult(scannedStudent, guardianName, dlLast4);
-    }
+      document.getElementById("parentOutput").value = "Checking authorized adult list...";
 
-    function verifyAdult(studentInfo, guardianName, dlLast4) {
-      fetch("https://script.google.com/macros/s/AKfycbyxX6f3GJdqdmDrqhTnZDV27OxjAawB8Ewc2OIWmMhmamQUKXZvrXXFFJUGAEwQyC8/exec", {
+        verifyAdult(scannedStudent, guardianName, dlLast4);
+      }
+
+      function verifyAdult(studentInfo, guardianName, dlLast4) {
+        fetch(SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify({
-          action: "verifyAdult",
-          studentInfo: studentInfo,
-          guardianName: guardianName,
-          dlLast4: dlLast4
-        })
+        action: "verifyAdult",
+        studentInfo: studentInfo,
+        guardianName: guardianName,
+        dlLast4: dlLast4
+      })
       })
       .then(response => response.text())
       .then(result => {
+        result = result.trim();
+
         if (result === "AUTHORIZED") {
           showParentResult(true);
           savePickup(studentInfo, guardianName, dlLast4);
         } else {
           showParentResult(false);
         }
+      })
+      .catch(error => {
+        console.error(error);
+        document.getElementById("parentOutput").value =
+          "Error checking authorized adult list.";
       });
+    }
+
+    function savePickup(studentInfo, guardianName, dlLast4) {
+      const time = new Date().toLocaleTimeString();
+      const date = new Date().toLocaleDateString();
+      const staffName = sessionStorage.getItem("staffName");
+
+      document.getElementById("parentOutput").value =
+        `${studentInfo} / ${guardianName} / DL ending ${dlLast4} / AUTHORIZED / ${time} / ${date} / ${staffName}`;
+
+      sendParentCheck(studentInfo, guardianName, dlLast4, time, date, staffName);
     }
 
     function sendParentCheck(studentInfo, guardianName, dlLast4, time, date, staffName) {
@@ -130,7 +153,7 @@
 
       lastSubmittedPickup = pickupKey;
 
-      fetch("https://script.google.com/macros/s/AKfycbyxX6f3GJdqdmDrqhTnZDV27OxjAawB8Ewc2OIWmMhmamQUKXZvrXXFFJUGAEwQyC8/exec", {
+      fetch(SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify({
           sheetName: "Parental/Guardian Checks",
@@ -142,6 +165,20 @@
           staffName: staffName
         })
       });
+    }
+
+    function showParentResult(isAuthorized) {
+      const output = document.getElementById("parentOutput");
+
+      if (isAuthorized) {
+        output.value = "✅ AUTHORIZED PICKUP";
+        output.style.backgroundColor = "#d4edda";
+        output.style.color = "#155724";
+      } else {
+        output.value = "❌ NOT AUTHORIZED - DO NOT RELEASE STUDENT";
+        output.style.backgroundColor = "#f8d7da";
+        output.style.color = "#721c24";
+      }
     }
 
     function onScanSuccess(decodedText) {
