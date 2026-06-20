@@ -143,10 +143,18 @@
       document.getElementById("parentOutput").value =
         `${studentInfo} / ${guardianName} / DL ending ${dlLast4} / AUTHORIZED / ${time} / ${date} / ${staffName}`;
 
-      sendParentCheck(studentInfo, guardianName, dlLast4, time, date, staffName);
+      sendParentCheck(
+        studentInfo,
+        guardianName,
+        dlLast4,
+        "YES",
+        time,
+        date,
+        staffName
+      );
     }
 
-    function sendParentCheck(studentInfo, guardianName, dlLast4, time, date, staffName) {
+    function sendParentCheck(studentInfo, guardianName, dlLast4, time, date, authorized, staffName) {
       const pickupKey = `${studentInfo}-${guardianName}-${dlLast4}`;
 
       if (lastSubmittedPickup === pickupKey) {
@@ -164,6 +172,7 @@
           dlLast4: dlLast4,
           time: time,
           date: date,
+          authorized: authorized,
           staffName: staffName
         })
       });
@@ -180,6 +189,20 @@
         output.value = "❌ NOT AUTHORIZED - DO NOT RELEASE STUDENT";
         output.style.backgroundColor = "#f8d7da";
         output.style.color = "#721c24";
+
+        const time = new Date().toLocaleTimeString();
+        const date = new Date().toLocaleDateString();
+        const staffName = sessionStorage.getItem("staffName");
+
+        sendParentCheck(
+          scannedStudent,
+          document.getElementById("guardianName").value.trim(),
+          document.getElementById("dlLast4").value.trim(),
+          "NO",
+          time,
+          date,
+          staffName
+        );
       }
     }
 
