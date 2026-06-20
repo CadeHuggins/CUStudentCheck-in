@@ -154,7 +154,7 @@
       );
     }
 
-    function sendParentCheck(studentInfo, guardianName, dlLast4, authorized, time, date, staffName)
+    function sendParentCheck(studentInfo, guardianName, dlLast4, authorized, time, date, staffName) {
       const pickupKey = `${studentInfo}-${guardianName}-${dlLast4}`;
 
       if (lastSubmittedPickup === pickupKey) {
