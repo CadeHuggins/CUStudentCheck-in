@@ -147,14 +147,14 @@
         studentInfo,
         guardianName,
         dlLast4,
+        "YES",
         time,
         date,
-        "YES",
         staffName
       );
     }
 
-    function sendParentCheck(studentInfo, guardianName, dlLast4, time, date, authorized, staffName) {
+    function sendParentCheck(studentInfo, guardianName, dlLast4, authorized, time, date, staffName)
       const pickupKey = `${studentInfo}-${guardianName}-${dlLast4}`;
 
       if (lastSubmittedPickup === pickupKey) {
@@ -198,9 +198,9 @@
           scannedStudent,
           document.getElementById("guardianName").value.trim(),
           document.getElementById("dlLast4").value.trim(),
+          "NO",
           time,
           date,
-          "NO",
           staffName
         );
       }
