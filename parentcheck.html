@@ -70,7 +70,7 @@
 </section>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyxX6f3GJdqdmDrqhTnZDV27OxjAawB8Ewc2OIWmMhmamQUKXZvrXXFFJUGAEwQyC8/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby36gxVRyLZZH1zYED6y0sq0sHHFMyg54Ihovf5BvLd7k8PUOKKDzuHgkShTm3y9qgo/exec";
 
     let scannedStudent = "";
     let lastSubmittedPickup = "";
@@ -118,6 +118,8 @@
       .then(response => response.text())
       .then(result => {
         result = result.trim();
+        console.log("VERIFY RESULT:", result);
+        document.getElementById("parentOutput").value = "Verify result: " + result;
 
         if (result === "AUTHORIZED") {
           showParentResult(true);
