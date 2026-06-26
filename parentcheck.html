@@ -40,14 +40,10 @@
   </nav>
 
   <section class="Check-in">
-
-  <label for="guardianName">Parent/Guardian Name</label>
-  <input type="text" id="guardianName" placeholder="Enter parent/guardian name" />
-
   <br /><br />
-
-  <label for="dlLast4">DL Last 4 Digits</label>
-  <input type="text" id="dlLast4" maxlength="4" placeholder="Last 4 digits" />
+    
+  <label for="dlNumber">Driver License Number</label>
+  <input type="text" id="dlNumber" placeholder="Enter full DL number" />
 
   <br /><br />
 
@@ -70,84 +66,76 @@
 </section>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDze1e9lc1V_rwET8GUqwFAX4HV_MPxKKK_WslqFqk7Slo3ROCPjnyOQcick3rnL2K/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDze1e9lc1V_rwET8GUqwFAX4HV_MPxKKK_WslqFqk7Slo3ROCPjnyOQcick3rnL2K/exec";
 
-    let scannedStudent = "";
-    let lastSubmittedPickup = "";
+  let scannedStudent = "";
+  let lastSubmittedPickup = "";
 
-    function storeStudent(qrText) {
-      scannedStudent = qrText;
-      document.getElementById("parentOutput").value =
-        `Student scanned: ${scannedStudent}`;
+  function storeStudent(qrText) {
+    scannedStudent = qrText;
+    document.getElementById("parentOutput").value =
+      `Student scanned: ${scannedStudent}`;
+  }
+
+  function confirmPickup() {
+    const dlNumber = document.getElementById("dlNumber").value.trim();
+
+    if (scannedStudent === "") {
+      alert("Please scan a student QR code first.");
+      return;
     }
 
-    function confirmPickup() {
-      const guardianName = document.getElementById("guardianName").value.trim();
-      const dlLast4 = document.getElementById("dlLast4").value.trim();
+    if (dlNumber === "") {
+      alert("Please enter the driver license number.");
+      return;
+    }
 
-      if (scannedStudent === "") {
-        alert("Please scan a student QR code first.");
-        return;
-      }
+    document.getElementById("parentOutput").value =
+      "Checking authorized adult list...";
 
-      if (guardianName === "") {
-        alert("Please enter the parent/guardian name.");
-        return;
-      }
+    verifyAdult(scannedStudent, dlNumber);
+  }
 
-      if (!/^\d{4}$/.test(dlLast4)) {
-        alert("Please enter exactly 4 digits for DL Last 4.");
-        return;
-      }
-
-      document.getElementById("parentOutput").value = "Checking authorized adult list...";
-
-        verifyAdult(scannedStudent, guardianName, dlLast4);
-      }
-
-      function verifyAdult(studentInfo, guardianName, dlLast4) {
-        fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({
+  function verifyAdult(studentInfo, dlNumber) {
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
         action: "verifyAdult",
         studentInfo: studentInfo,
-        guardianName: guardianName,
-        dlLast4: dlLast4
+        dlNumber: dlNumber
       })
-      })
-      .then(response => response.text())
-      .then(result => {
-        result = result.trim();
-        console.log("VERIFY RESULT:", result);
-        document.getElementById("parentOutput").value = "Verify result: " + result;
+    })
+    .then(response => response.text())
+    .then(result => {
+      result = result.trim();
 
-        if (result === "AUTHORIZED") {
-          showParentResult(true);
-          savePickup(studentInfo, guardianName, dlLast4);
-        } else {
-          showParentResult(false);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        document.getElementById("parentOutput").value =
-          "Error checking authorized adult list.";
-      });
-    }
-
-    function savePickup(studentInfo, guardianName, dlLast4) {
-      const time = new Date().toLocaleTimeString();
-      const date = new Date().toLocaleDateString();
-      const staffName = sessionStorage.getItem("staffName");
-
+      if (result === "AUTHORIZED") {
+        showParentResult(true);
+        savePickup(studentInfo, dlNumber);
+      } else {
+        showParentResult(false);
+      }
+    })
+    .catch(error => {
+      console.error(error);
       document.getElementById("parentOutput").value =
-        `${studentInfo} / ${guardianName} / DL ending ${dlLast4} / AUTHORIZED / ${time} / ${date} / ${staffName}`;
+        "Error checking authorized adult list.";
+    });
+  }
 
-      sendParentCheck(studentInfo, guardianName, dlLast4, time, date, "YES", staffName);
-    }
+  function savePickup(studentInfo, dlNumber) {
+    const time = new Date().toLocaleTimeString();
+    const date = new Date().toLocaleDateString();
+    const staffName = sessionStorage.getItem("staffName");
 
-    function sendParentCheck(studentInfo, guardianName, dlLast4, time, date, authorized, staffName) {
-    const pickupKey = `${studentInfo}-${guardianName}-${dlLast4}-${authorized}`;
+    document.getElementById("parentOutput").value =
+      `${studentInfo} / DL ${dlNumber} / AUTHORIZED / ${time} / ${date} / ${staffName}`;
+
+    sendParentCheck(studentInfo, dlNumber, time, date, "YES", staffName);
+  }
+
+  function sendParentCheck(studentInfo, dlNumber, time, date, authorized, staffName) {
+    const pickupKey = `${studentInfo}-${dlNumber}-${authorized}`;
 
     if (lastSubmittedPickup === pickupKey) {
       return;
@@ -160,8 +148,7 @@
       body: JSON.stringify({
         sheetName: "Parental/Guardian Checks",
         studentInfo: studentInfo,
-        guardianName: guardianName,
-        dlLast4: dlLast4,
+        dlNumber: dlNumber,
         time: time,
         date: date,
         authorized: authorized,
@@ -170,73 +157,72 @@
     });
   }
 
-    function showParentResult(isAuthorized) {
-      const output = document.getElementById("parentOutput");
+  function showParentResult(isAuthorized) {
+    const output = document.getElementById("parentOutput");
 
-      if (isAuthorized) {
-        output.value = "✅ AUTHORIZED PICKUP";
-        output.style.backgroundColor = "#d4edda";
-        output.style.color = "#155724";
-      } else {
-        output.value = "❌ NOT AUTHORIZED - DO NOT RELEASE STUDENT";
-        output.style.backgroundColor = "#f8d7da";
-        output.style.color = "#721c24";
+    if (isAuthorized) {
+      output.value = "✅ AUTHORIZED PICKUP";
+      output.style.backgroundColor = "#d4edda";
+      output.style.color = "#155724";
+    } else {
+      output.value = "❌ NOT AUTHORIZED - DO NOT RELEASE STUDENT";
+      output.style.backgroundColor = "#f8d7da";
+      output.style.color = "#721c24";
 
-        const time = new Date().toLocaleTimeString();
-        const date = new Date().toLocaleDateString();
-        const staffName = sessionStorage.getItem("staffName");
+      const time = new Date().toLocaleTimeString();
+      const date = new Date().toLocaleDateString();
+      const staffName = sessionStorage.getItem("staffName");
+      const dlNumber = document.getElementById("dlNumber").value.trim();
 
-        sendParentCheck(
-          scannedStudent,
-          document.getElementById("guardianName").value.trim(),
-          document.getElementById("dlLast4").value.trim(),
-          time,
-          date,
-          "NO",
-          staffName
-        );
-      }
+      sendParentCheck(
+        scannedStudent,
+        dlNumber,
+        time,
+        date,
+        "NO",
+        staffName
+      );
     }
+  }
 
-    function onScanSuccess(decodedText) {
-      storeStudent(decodedText);
-    }
+  function onScanSuccess(decodedText) {
+    storeStudent(decodedText);
+  }
 
-    const html5QrCode = new Html5Qrcode("reader");
+  const html5QrCode = new Html5Qrcode("reader");
 
-    html5QrCode.start(
-      { facingMode: "environment" },
-      {
-        fps: 10,
-        qrbox: 250
-      },
-      onScanSuccess
-    );
+  html5QrCode.start(
+    { facingMode: "environment" },
+    {
+      fps: 10,
+      qrbox: 250
+    },
+    onScanSuccess
+  );
 
-    const sidemenu = document.getElementById("sidemenu");
-    const overlay = document.getElementById("overlay");
-    const openBtn = document.getElementById("openMenu");
-    const closeBtn = document.getElementById("closeMenu");
+  const sidemenu = document.getElementById("sidemenu");
+  const overlay = document.getElementById("overlay");
+  const openBtn = document.getElementById("openMenu");
+  const closeBtn = document.getElementById("closeMenu");
 
-    openBtn.addEventListener("click", () => {
-      sidemenu.classList.add("open");
-      overlay.classList.add("show");
-    });
+  openBtn.addEventListener("click", () => {
+    sidemenu.classList.add("open");
+    overlay.classList.add("show");
+  });
 
-    function closeMenu() {
-      sidemenu.classList.remove("open");
-      overlay.classList.remove("show");
-    }
+  function closeMenu() {
+    sidemenu.classList.remove("open");
+    overlay.classList.remove("show");
+  }
 
-    function logout() {
-      sessionStorage.removeItem("loggedIn");
-      sessionStorage.removeItem("staffName");
-      window.location.href = "login.html";
-    }
+  function logout() {
+    sessionStorage.removeItem("loggedIn");
+    sessionStorage.removeItem("staffName");
+    window.location.href = "login.html";
+  }
 
-    closeBtn.addEventListener("click", closeMenu);
-    overlay.addEventListener("click", closeMenu);
-  </script>
-
+  closeBtn.addEventListener("click", closeMenu);
+  overlay.addEventListener("click", closeMenu);
+</script>
 </body>
 </html>
